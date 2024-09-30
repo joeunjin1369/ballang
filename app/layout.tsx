@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "joeunjin-ballang",
 };
 
-export default function RootLayout({
+function HTMLLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -17,3 +17,4 @@ export default function RootLayout({
     </html>
   );
 }
+export default HTMLLayout;
