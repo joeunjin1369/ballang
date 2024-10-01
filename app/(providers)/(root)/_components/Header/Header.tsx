@@ -1,7 +1,11 @@
 import Link from "next/link";
 import React from "react";
 
-function Header() {
+interface HeaderProps {
+  handleClickLogIn: () => void;
+}
+
+function Header({ handleClickLogIn }: HeaderProps) {
   return (
     <header className="border-b py-4 px-8 flex items-center min-w-full justify-between">
       <div className="flex gap-x-16 items-center">
@@ -17,7 +21,9 @@ function Header() {
           <Link href={"/sign-up"}>회원가입</Link>
         </li>
         <li>
-          <Link href={""}>로그인</Link>
+          <p onClick={handleClickLogIn} className="cursor-pointer">
+            로그인
+          </p>
         </li>
       </ul>
     </header>
