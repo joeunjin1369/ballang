@@ -1,3 +1,5 @@
+"use client";
+
 import api from "@/api/api";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
