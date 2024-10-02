@@ -1,6 +1,6 @@
 "use client";
 
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren } from "react";
 import Header from "./_components/Header/Header";
 import LogInModal from "./_components/LogInModal/LogInModal";
 import { useAuthStore } from "@/zustand/auth.store";
