@@ -1,12 +1,42 @@
-import React from "react";
+"use client";
 
-interface HeaderProps {
-  handleClickLogIn: () => void;
+import api from "@/api/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+
+interface LogInModalProps {
+  handleClickLogInModal: () => void;
 }
 
-function LogInModal({ handleClickLogIn }: HeaderProps) {
+function LogInModal({ handleClickLogInModal }: LogInModalProps) {
+  const queryClient = useQueryClient();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { mutate: logIn } = useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) => {
+      return api.auth.logIn(email, password);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accessToken"] });
+    },
+  });
+
   const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget === e.target) handleClickLogIn();
+    if (e.currentTarget === e.target) handleClickLogInModal();
+  };
+
+  const handleClickLogIn = async () => {
+    if (!email) return alert("이메일을 입력해 주세요");
+    if (!email.includes("@") || !email.includes("."))
+      return alert("올바른 이메일을 입력해 주세요");
+    if (!password) return alert("비밀번호를 입력해 주세요");
+
+    logIn({ email, password });
+
+    alert("로그인 되었습니다.");
+
+    handleClickLogInModal();
   };
   return (
     <div
@@ -21,8 +51,9 @@ function LogInModal({ handleClickLogIn }: HeaderProps) {
               이메일
             </label>
             <input
+              onChange={(e) => setEmail(e.target.value)}
               id="email"
-              type="password"
+              type="text"
               className="block border w-full px-6 py-3 rounded focus:border-black outline-none transition border-slate-300"
             />
           </div>
@@ -31,13 +62,17 @@ function LogInModal({ handleClickLogIn }: HeaderProps) {
               비밀번호
             </label>
             <input
+              onChange={(e) => setPassword(e.target.value)}
               id="password"
               type="password"
               className="block border w-full px-6 py-3 rounded focus:border-black outline-none transition border-slate-300"
             />
           </div>
-          <button className="mt-4 bg-black py-4 text-white font-bold hover:-translate-y-1 transition w-full">
-            회원가입 하기
+          <button
+            onClick={handleClickLogIn}
+            className="mt-4 bg-black py-4 text-white font-bold hover:-translate-y-1 transition w-full"
+          >
+            로그인 하기
           </button>
         </section>
       </div>

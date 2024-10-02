@@ -1,25 +1,21 @@
-"use client";
-
 import api from "@/api/api";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 import React from "react";
 import Page from "../../_components/Page/Page";
 import Link from "next/link";
+import CartButton from "./_components/CartButton/CartButton";
 
-function ProductDetailPage() {
-  const { productId } = useParams();
+interface ProductDetailPageProps {
+  params: {
+    productId: string;
+  };
+}
 
-  console.log();
+async function ProductDetailPage(props: ProductDetailPageProps) {
+  const productId = props.params.productId;
 
-  const { data } = useQuery({
-    queryKey: ["product", productId],
-    queryFn: () => api.products.getProduct(productId),
-  });
+  const data = await api.products.getProduct(productId);
 
   const product = data?.result;
-
-  console.log(product);
 
   return (
     <Page>
@@ -28,7 +24,10 @@ function ProductDetailPage() {
           <img src={product?.imgSrc} className="aspect-[3/4]" />
         </div>
         <div className="py-8 flex flex-col">
-          <Link href={`/brands?brandId=${product?.brandId}`} className="flex gap-x-2  font-bold text-[15px] border-b py-2 ">
+          <Link
+            href={`/brands?brandId=${product?.brandId}`}
+            className="flex gap-x-2  font-bold text-[15px] border-b py-2 "
+          >
             <span>{product?.brand.nameKr}</span>
             <span>/</span>
             <span>{product?.brand.nameEn}</span>
@@ -50,7 +49,7 @@ function ProductDetailPage() {
             <div>잔여재고</div>
             <div className="col-span-4 font-normal">{product?.onlineStock}</div>
           </div>
-          <button className="mt-10 bg-black py-4 text-white font-bold hover:-translate-y-1 transition">장바구니에 담기</button>
+          <CartButton productId={productId} />
         </div>
       </section>
     </Page>

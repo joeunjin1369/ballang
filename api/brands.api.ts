@@ -1,25 +1,19 @@
 import { BrandProductData, BrandsData } from "@/schema/brands.schema";
 import axios from "axios";
 
-const BASE_URL = "https://api.ballang.yoojinyoung.com";
-
-
+const apiClient = axios.create({
+  baseURL: "https://api.ballang.yoojinyoung.com",
+  withCredentials: true,
+});
 
 async function getBrands() {
-  const response = await axios.get<BrandsData>(`${BASE_URL}/brands`, {
-    withCredentials: true,
-  });
+  const response = await apiClient.get<BrandsData>("/brands");
   const brands = response.data;
   return brands;
 }
 
 async function getBrand(brandId: string) {
-  const response = await axios.get<BrandProductData>(
-    `${BASE_URL}/brands/${brandId}`,
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await apiClient.get<BrandProductData>(`/brands/${brandId}`);
   const brand = response.data;
   return brand;
 }

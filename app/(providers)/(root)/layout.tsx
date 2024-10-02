@@ -5,17 +5,17 @@ import Header from "./_components/Header/Header";
 import LogInModal from "./_components/LogInModal/LogInModal";
 
 function RootLayout({ children }: PropsWithChildren) {
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
-  const toggleModal = () => {
-    setModalOpen(!isModalOpen);
+  const handleClickLogInModal = () => {
+    setLoginModalOpen(!isLoginModalOpen);
   };
 
   return (
     <>
-      <Header handleClickLogIn={toggleModal} />
+      <Header handleClickLogInModal={handleClickLogInModal} />
       <main>{children}</main>
-      {isModalOpen && <LogInModal handleClickLogIn={toggleModal} />}
+      {isLoginModalOpen && <LogInModal handleClickLogInModal={handleClickLogInModal} />}
     </>
   );
 }

@@ -1,21 +1,7 @@
+import { Product } from "@/schema/products.schema";
 import Link from "next/link";
 import React from "react";
 
-interface Product {
-  id: number;
-  brand: {
-    id: number;
-    nameKr: string;
-    nameEn: string;
-  };
-  brandId: number;
-  deliveryType: string;
-  imgSrc: string;
-  name: string;
-  onlineStock: number;
-  originalPrice: number;
-  price: number;
-}
 
 function ProductCard({ product }: { product: Product }) {
   return (

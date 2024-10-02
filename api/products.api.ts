@@ -1,22 +1,19 @@
 import { ProductData, ProductsData } from "@/schema/products.schema";
 import axios from "axios";
 
-const BASE_URL = "https://api.ballang.yoojinyoung.com";
-
-
+const apiClient = axios.create({
+  baseURL: "https://api.ballang.yoojinyoung.com",
+  withCredentials: true,
+});
 
 async function getProducts() {
-  const response = await axios.get<ProductsData>(`${BASE_URL}/products`, {
-    withCredentials: true,
-  });
+  const response = await apiClient.get<ProductsData>("/products");
   const products = response.data;
   return products;
 }
 
 async function getProduct(productId: string | string[]) {
-  const response = await axios.get<ProductData>(`${BASE_URL}/products/${productId}`, {
-    withCredentials: true,
-  });
+  const response = await apiClient.get<ProductData>(`/products/${productId}`);
   const product = response.data;
   return product;
 }
