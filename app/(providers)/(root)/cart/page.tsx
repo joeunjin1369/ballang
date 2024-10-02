@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 function CartPage() {
   const route = useRouter();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-  if (!isLoggedIn) return route.replace("/");
 
   const { data } = useQuery({
     queryKey: ["cart"],
@@ -20,6 +19,8 @@ function CartPage() {
   });
 
   const cartProducts = data?.items;
+
+  if (!isLoggedIn) return route.replace("/");
 
   return (
     <Page>
