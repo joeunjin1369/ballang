@@ -16,7 +16,7 @@ function BrandsPage(props: BrandsPageProps) {
     <Page>
       <h2 className="py-10 text-center font-bold text-3xl">Brands</h2>
       <nav className="m-auto max-w-screen-lg mb-20">
-        <BrandsList />
+        <BrandsList brandId={brandId} />
       </nav>
       <BrandProductsList brandId={brandId} />
     </Page>

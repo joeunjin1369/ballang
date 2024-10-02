@@ -9,18 +9,18 @@ function AuthProvider({ children }: PropsWithChildren) {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn);
 
-  const { data } = useQuery({
+  const { data : accessToken } = useQuery({
     queryKey: ["accessToken"],
     queryFn: api.auth.accessToken,
   });
 
   useEffect(() => {
-    if (data) {
-      console.log(data);
-      setIsLoggedIn(data.result ? true : false);
+    if (accessToken) {
+      console.log(accessToken);
+      setIsLoggedIn(accessToken.result ? true : false);
       initializeAuth();
     }
-  }, [data, initializeAuth, setIsLoggedIn]);
+  }, [accessToken, initializeAuth, setIsLoggedIn]);
 
   return <>{children}</>;
 }

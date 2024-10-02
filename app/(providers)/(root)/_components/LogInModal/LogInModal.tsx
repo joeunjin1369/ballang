@@ -1,17 +1,16 @@
 "use client";
 
 import api from "@/api/api";
+import { useAuthStore } from "@/zustand/auth.store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 
-interface LogInModalProps {
-  handleClickLogInModal: () => void;
-}
-
-function LogInModal({ handleClickLogInModal }: LogInModalProps) {
+function LogInModal() {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const toggleLoginModal = useAuthStore((state) => state.toggleLoginModal);
 
   const { mutate: logIn } = useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) => {
@@ -19,11 +18,13 @@ function LogInModal({ handleClickLogInModal }: LogInModalProps) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["accessToken"] });
+      alert("로그인 되었습니다.");
+      toggleLoginModal();
     },
   });
 
   const handleClickBackground = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget === e.target) handleClickLogInModal();
+    if (e.currentTarget === e.target) toggleLoginModal();
   };
 
   const handleClickLogIn = async () => {
@@ -32,11 +33,8 @@ function LogInModal({ handleClickLogInModal }: LogInModalProps) {
       return alert("올바른 이메일을 입력해 주세요");
     if (!password) return alert("비밀번호를 입력해 주세요");
 
+    setIsLoading(true);
     logIn({ email, password });
-
-    alert("로그인 되었습니다.");
-
-    handleClickLogInModal();
   };
   return (
     <div
@@ -51,6 +49,7 @@ function LogInModal({ handleClickLogInModal }: LogInModalProps) {
               이메일
             </label>
             <input
+              disabled={isLoading}
               onChange={(e) => setEmail(e.target.value)}
               id="email"
               type="text"
@@ -62,6 +61,7 @@ function LogInModal({ handleClickLogInModal }: LogInModalProps) {
               비밀번호
             </label>
             <input
+              disabled={isLoading}
               onChange={(e) => setPassword(e.target.value)}
               id="password"
               type="password"

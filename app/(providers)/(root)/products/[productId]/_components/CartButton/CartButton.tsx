@@ -1,12 +1,15 @@
 "use client";
 
 import api from "@/api/api";
+import { useAuthStore } from "@/zustand/auth.store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 
 function CartButton({ productId }: { productId: string }) {
-  const queryClient = useQueryClient();
   const [isin, setIsIn] = useState(false);
+  const queryClient = useQueryClient();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const toggleLoginModal = useAuthStore((state) => state.toggleLoginModal);
 
   const { data } = useQuery({
     queryKey: ["cart"],
@@ -44,6 +47,7 @@ function CartButton({ productId }: { productId: string }) {
   }, []);
 
   const handleClickAddCart = () => {
+    if (!isLoggedIn) return toggleLoginModal();
     addCart(productId);
   };
 

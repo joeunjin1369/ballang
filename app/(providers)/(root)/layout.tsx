@@ -3,19 +3,16 @@
 import React, { PropsWithChildren, useState } from "react";
 import Header from "./_components/Header/Header";
 import LogInModal from "./_components/LogInModal/LogInModal";
+import { useAuthStore } from "@/zustand/auth.store";
 
 function RootLayout({ children }: PropsWithChildren) {
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
-
-  const handleClickLogInModal = () => {
-    setLoginModalOpen(!isLoginModalOpen);
-  };
+  const isLoginModalOpen = useAuthStore((state) => state.isLoginModalOpen);
 
   return (
     <>
-      <Header handleClickLogInModal={handleClickLogInModal} />
+      <Header/>
       <main>{children}</main>
-      {isLoginModalOpen && <LogInModal handleClickLogInModal={handleClickLogInModal} />}
+      {isLoginModalOpen && <LogInModal/>}
     </>
   );
 }

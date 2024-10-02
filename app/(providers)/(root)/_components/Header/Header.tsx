@@ -2,16 +2,15 @@ import api from "@/api/api";
 import { useAuthStore } from "@/zustand/auth.store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-interface HeaderProps {
-  handleClickLogInModal: () => void;
-}
-
-function Header({ handleClickLogInModal }: HeaderProps) {
+function Header() {
   const queryClient = useQueryClient();
+  const route = useRouter();
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const isAuthInitialized = useAuthStore((state) => state.isAuthInitialized);
+  const toggleLoginModal = useAuthStore((state) => state.toggleLoginModal);
 
   const { mutate: logOut } = useMutation({
     mutationFn: async () => {
@@ -25,6 +24,7 @@ function Header({ handleClickLogInModal }: HeaderProps) {
   const handleClickLogOut = async () => {
     logOut();
     alert("로그아웃 되었습니다");
+    route.replace("/");
   };
 
   return (
@@ -38,7 +38,7 @@ function Header({ handleClickLogInModal }: HeaderProps) {
         </nav>
       </div>
       <ul className="flex gap-x-4">
-        {isAuthInitialized ? (
+        { isAuthInitialized ? (
           isLoggedIn ? (
             <>
               <li>
@@ -56,7 +56,7 @@ function Header({ handleClickLogInModal }: HeaderProps) {
                 <Link href={"/sign-up"}>회원가입</Link>
               </li>
               <li>
-                <p onClick={handleClickLogInModal} className="cursor-pointer">
+                <p onClick={toggleLoginModal} className="cursor-pointer">
                   로그인
                 </p>
               </li>

@@ -1,13 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Page from "../_components/Page/Page";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/api/api";
 import Link from "next/link";
 import CartProduct from "./_components/CartProduct";
+import { useAuthStore } from "@/zustand/auth.store";
+import { useRouter } from "next/navigation";
 
 function CartPage() {
+  const route = useRouter();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  if (!isLoggedIn) return route.replace("/");
+
   const { data } = useQuery({
     queryKey: ["cart"],
     queryFn: api.cart.getCart,
@@ -32,7 +38,7 @@ function CartPage() {
         <section>
           <ul className="border-b max-w-screen-lg m-auto">
             {cartProducts?.map((cartProduct) => (
-              <li key={cartProduct.id} >
+              <li key={cartProduct.id}>
                 <CartProduct cartProduct={cartProduct} />
               </li>
             ))}

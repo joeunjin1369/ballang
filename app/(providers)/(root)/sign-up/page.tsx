@@ -18,6 +18,8 @@ function SignUpPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["accessToken"] });
+      alert("회원가입 되었습니다");
+      route.push("/");
     },
   });
 
@@ -30,10 +32,6 @@ function SignUpPage() {
       return alert("비밀번호와 비밀번호 확인이 일치하지 않습니다");
 
     signUp({ email, password });
-
-    alert("회원가입 되었습니다");
-
-    route.push("/");
   };
 
   return (
